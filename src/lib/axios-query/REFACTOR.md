@@ -1,0 +1,1 @@
+This lib is probably not necessary. The hooks don't seem to simplify much. The original useQuery and useMutation hooks seem to hide typescript boilerplate enough if properly used.
