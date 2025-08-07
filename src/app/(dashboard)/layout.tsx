@@ -13,24 +13,20 @@ import {
 	VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import {
-	createContext,
-	type Dispatch,
-	type ReactNode,
-	type SetStateAction,
-	useContext,
-	useState,
-} from "react";
+import { type ReactNode, useState } from "react";
 import { IoIosArrowRoundBack } from "react-icons/io";
+import {
+	DashboardLayoutContextProvider,
+	type DashboardLayoutState,
+} from "@/components/layout/dashboard/context";
 import DashboardSidebar from "@/components/layout/dashboard/DashboardSidebar";
 import useSession from "@/lib/session/context/useSession";
-import MissingProviderError from "@/lib/utils/errors/MissingProviderError";
 
 export default function DashboardLayout({
 	children,
-}: {
+}: Readonly<{
 	children: React.ReactNode;
-}) {
+}>) {
 	const router = useRouter();
 
 	const [state, setState] = useState<DashboardLayoutState>({
@@ -43,7 +39,7 @@ export default function DashboardLayout({
 	if (!session.loggedIn) return children;
 
 	return (
-		<DashboardLayoutContext.Provider value={{ state, setState }}>
+		<DashboardLayoutContextProvider value={{ state, setState }}>
 			<Flex
 				direction="row"
 				minH="calc(100svh - 80px)"
@@ -136,7 +132,7 @@ export default function DashboardLayout({
 					</HStack>
 				</VStack>
 			</Flex>
-		</DashboardLayoutContext.Provider>
+		</DashboardLayoutContextProvider>
 	);
 }
 
@@ -155,25 +151,4 @@ function ContentSuspense({
 		);
 
 	return children;
-}
-
-type DashboardLayoutState = {
-	title: string | null;
-	actions: ReactNode | null;
-	backButton?: boolean;
-};
-
-type DashboardLayoutContextValue = {
-	state: DashboardLayoutState;
-	setState: Dispatch<SetStateAction<DashboardLayoutState>>;
-} | null;
-
-const DashboardLayoutContext = createContext<DashboardLayoutContextValue>(null);
-
-export function useDashboardLayout() {
-	const context = useContext(DashboardLayoutContext);
-	if (!context) {
-		throw new MissingProviderError(useDashboardLayout, DashboardLayoutContext);
-	}
-	return context;
 }

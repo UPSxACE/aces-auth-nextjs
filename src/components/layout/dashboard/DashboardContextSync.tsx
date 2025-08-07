@@ -2,9 +2,7 @@
 
 import { Spinner, VStack } from "@chakra-ui/react";
 import { type ReactNode, useEffect } from "react";
-import { useDashboardLayout } from "@/app/(dashboard)/layout";
-import IllegalClientStateError from "@/lib/utils/errors/IllegalClientStateError";
-// import useSession from "@/lib/session/context/useSession";
+import { useDashboardLayout } from "./context";
 
 export default function DashboardContextSync({
 	title,
